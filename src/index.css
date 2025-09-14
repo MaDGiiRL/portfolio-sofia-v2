@@ -1,0 +1,201 @@
+@import "tailwindcss";
+
+/* ================== Palette & Grid BG ================== */
+:root {
+  --color-primary: #C213F2;
+  /* magenta neon */
+  --color-surface: #2E1340;
+  /* viola scuro */
+  --color-base: #141A26;
+  /* blue-black */
+  --color-teal: #118C8C;
+  /* teal profondo */
+  --color-cyan: #13F2DC;
+  /* ciano neon */
+  --accent: #0EA7B8;
+  /* esempio: ciano/teal */
+  --bg: #121821;
+  /* base molto scura */
+  --size: 35px;
+  /* passo griglia */
+  --major-step: 1;
+}
+
+html,
+body {
+  height: 100%;
+}
+
+body {
+  font-family: "Geist";
+  margin: 0;
+  background-color: var(--bg);
+  background-image:
+    linear-gradient(to right, color-mix(in oklab, var(--accent) 5%, transparent) 1px, transparent 1px),
+    linear-gradient(to bottom, color-mix(in oklab, var(--accent) 5%, transparent) 1px, transparent 1px),
+    linear-gradient(to right, color-mix(in oklab, var(--accent) 5%, transparent) 1px, transparent 1px),
+    linear-gradient(to bottom, color-mix(in oklab, var(--accent) 5%, transparent) 1px, transparent 1px);
+  background-size:
+    var(--size) var(--size),
+    var(--size) var(--size),
+    calc(var(--size) * var(--major-step)) calc(var(--size) * var(--major-step)),
+    calc(var(--size) * var(--major-step)) calc(var(--size) * var(--major-step)),
+    auto;
+  background-position: 0 0, 0 0, 0 0, 0 0, 0 0;
+}
+
+.main-content {
+  min-height: 70vh;
+}
+
+/* ================== Fonts ================== */
+/* JetBrains Mono */
+@import url("https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600;700&display=swap");
+
+/* Utility font per i blocchi codice */
+.font-jbm,
+.font-code {
+  font-family: "JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, Monaco,
+    Consolas, "Liberation Mono", "Courier New", monospace;
+}
+
+/* ================== Glow & helpers ================== */
+.glow-cyan {
+  text-shadow: 0 0 8px rgba(19, 242, 220, 0.60);
+}
+
+.glow-fuchsia {
+  text-shadow: 0 0 8px rgba(194, 19, 242, 0.60);
+}
+
+/* colore custom usato nel markup del codice */
+.text-neon-purple {
+  color: var(--color-primary);
+}
+
+/* ================== Code card overlay ================== */
+.code-card {
+  position: relative;
+}
+
+.code-tint {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  opacity: 0.55;
+  mix-blend-mode: screen;
+  background:
+    radial-gradient(80% 60% at 20% 10%, rgba(19, 242, 220, .13), transparent 55%),
+    radial-gradient(80% 60% at 80% 90%, rgba(194, 19, 242, .18), transparent 55%);
+}
+
+/* ================== Code block base ================== */
+.code-block {
+  color: #d4d4d4;
+  /* default fg */
+  background: transparent;
+  /* lo sfondo è del contenitore */
+  line-height: 1.6;
+  font-size: 13px;
+  scrollbar-width: thin;
+}
+
+.code-block::-webkit-scrollbar {
+  height: 8px;
+  width: 8px;
+}
+
+.code-block::-webkit-scrollbar-thumb {
+  background: rgba(148, 163, 184, .35);
+  border-radius: 9999px;
+}
+
+.code-block::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+/* ================== Token coloring — in PALETTE ================== */
+/* commenti in teal schiarito */
+.tok-comment {
+  color: color-mix(in oklab, var(--color-teal) 70%, white 30%);
+  font-style: italic;
+}
+
+/* keyword in ciano neon */
+.tok-keyword {
+  color: var(--color-cyan);
+}
+
+/* stringhe in magenta neon */
+.tok-string {
+  color: var(--color-primary);
+}
+
+/* numeri cyan soft */
+.tok-number {
+  color: color-mix(in oklab, var(--color-cyan) 70%, white 30%);
+}
+
+/* variabili cyan tenue */
+.tok-var {
+  color: color-mix(in oklab, var(--color-cyan) 60%, white 40%);
+}
+
+/* funzioni teal chiaro */
+.tok-fn {
+  color: color-mix(in oklab, var(--color-teal) 65%, white 35%);
+}
+
+/* metodi cyan medio */
+.tok-method {
+  color: color-mix(in oklab, var(--color-cyan) 80%, white 20%);
+}
+
+/* punteggiatura grigio freddo con tinta teal */
+.tok-punct {
+  color: color-mix(in oklab, var(--color-teal) 25%, #8899a6 75%);
+}
+
+/* Fallback per browser senza color-mix */
+@supports not (color: color-mix(in oklab, white, black)) {
+  .tok-comment {
+    color: #5CC2C2;
+  }
+
+  .tok-keyword {
+    color: #13F2DC;
+  }
+
+  .tok-string {
+    color: #C213F2;
+  }
+
+  .tok-number {
+    color: #7CF4EA;
+  }
+
+  .tok-var {
+    color: #9DEBE4;
+  }
+
+  .tok-fn {
+    color: #5FD0C8;
+  }
+
+  .tok-method {
+    color: #4FEFE3;
+  }
+
+  .tok-punct {
+    color: #7AA0A0;
+  }
+}
+
+.bg-image {
+  background-image: url(https://i.imgur.com/4aaNtsN.png);
+  background-size: cover;
+}
+
+html {
+  scroll-behavior: smooth;
+}
