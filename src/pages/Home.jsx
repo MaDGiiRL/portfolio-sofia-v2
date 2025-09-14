@@ -52,9 +52,7 @@ export default function Home() {
       </section>
 
       <section id="skills" className="scroll-mt-28">
-        <Reveal delay={0.08}>
-          <SkillsSection />
-        </Reveal>
+        <SkillsSection />
       </section>
 
       <section id="services" className="scroll-mt-28">
