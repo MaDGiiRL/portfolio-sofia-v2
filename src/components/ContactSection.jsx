@@ -9,27 +9,33 @@ import {
   Facebook,
   ExternalLink,
 } from "lucide-react";
+import emailjs from "@emailjs/browser";
 
-const ICONS = {
-  instagram: Instagram,
-  linkedin: Linkedin,
-  github: Github,
-  dribbble: Dribbble,
-  facebook: Facebook,
-};
+// ⬇️ I TUOI valori reali
+const EMAILJS_SERVICE_ID = "service_fueznyc";
+const EMAILJS_TEMPLATE_ID = "template_ztn422f";
+const EMAILJS_PUBLIC_KEY = "VrfhUCVDgXaYqy732";
 
-export default function ContactSection({
-  email = "sofiavidotto8@gmail.com",
-  phone = "+39 351 725 5899",
-  socials = [
+export default function ContactSection() {
+  // Dati statici visivi (non c'entrano con EmailJS)
+  const email = "sofiavidotto8@gmail.com";
+  const phone = "+39 351 725 5899";
+  const socials = [
     { label: "Instagram", href: "#", icon: "instagram" },
     { label: "LinkedIn", href: "#", icon: "linkedin" },
     { label: "GitHub", href: "#", icon: "github" },
     { label: "Facebook", href: "#", icon: "facebook" },
     { label: "Dribbble", href: "#", icon: "dribbble" },
-  ],
-  onSubmit,
-}) {
+  ];
+
+  const ICONS = {
+    instagram: Instagram,
+    linkedin: Linkedin,
+    github: Github,
+    dribbble: Dribbble,
+    facebook: Facebook,
+  };
+
   const [form, setForm] = useState({
     name: "",
     email: "",
@@ -38,6 +44,7 @@ export default function ContactSection({
   });
   const [errors, setErrors] = useState({});
   const [status, setStatus] = useState("idle"); // 'idle' | 'sending' | 'sent' | 'error'
+  const [errorMsg, setErrorMsg] = useState("");
 
   const validate = () => {
     const e = {};
@@ -54,27 +61,43 @@ export default function ContactSection({
   async function handleSubmit(ev) {
     ev.preventDefault();
     if (!validate()) return;
+
     try {
       setStatus("sending");
-      const payload = {
-        name: form.name.trim(),
-        email: form.email.trim(),
+      setErrorMsg("");
+
+      // ⛳️ Nomi allineati con il template HTML che hai fornito:
+      // {{from_name}}, {{from_email}}, {{message}}, {{time}}
+      const templateParams = {
+        from_name: form.name.trim(),
+        from_email: form.email.trim(),
         message: form.message.trim(),
+        time: new Date().toLocaleString("it-IT", { timeZone: "Europe/Rome" }),
+
+        // facoltativi (non usati nel tuo HTML, ma utili):
+        subject: `Nuovo contatto dal sito — ${form.name.trim()}`,
+        reply_to: form.email.trim(),
+
+        // se nel template aggiungi {{to_email}} per pilotare il destinatario:
+        // to_email: "sofiavidotto8@gmail.com",
       };
-      if (onSubmit) {
-        await onSubmit(payload);
-      } else {
-        // fallback: stampa a console
-        console.log("[Contact] payload:", payload);
-        await new Promise((r) => setTimeout(r, 700));
-      }
+
+      const result = await emailjs.send(
+        EMAILJS_SERVICE_ID,
+        EMAILJS_TEMPLATE_ID,
+        templateParams,
+        { publicKey: EMAILJS_PUBLIC_KEY }
+      );
+
+      console.log("[EmailJS] result:", result); // { status: 200, text: 'OK' } se ok
       setStatus("sent");
       setForm({ name: "", email: "", message: "", bot: "" });
       setTimeout(() => setStatus("idle"), 1800);
     } catch (err) {
-      console.error(err);
+      console.error("[EmailJS] error:", err);
+      setErrorMsg(err?.text || err?.message || "Errore nell'invio");
       setStatus("error");
-      setTimeout(() => setStatus("idle"), 1800);
+      setTimeout(() => setStatus("idle"), 3000);
     }
   }
 
@@ -86,14 +109,12 @@ export default function ContactSection({
           <div className="font-jbm text-sm font-semibold tracking-widest text-cyan-300/90">
             // CONTATTI
           </div>
-
           <h2 className="mt-2 text-3xl font-extrabold text-white md:text-5xl">
             Connetti per{" "}
             <span className="bg-gradient-to-b from-fuchsia-400 to-fuchsia-600 bg-clip-text text-transparent drop-shadow-[0_0_24px_rgba(194,19,242,0.35)]">
               Innovare
             </span>
           </h2>
-
           <div className="mx-auto mt-3 h-1 w-20 rounded bg-gradient-to-r from-cyan-300 to-fuchsia-400" />
           <p className="mx-auto mt-5 max-w-3xl text-slate-300">
             Pronta a trasformare la tua idea in realtà digitale? Scrivimi e
@@ -141,6 +162,12 @@ export default function ContactSection({
               onChange={(v) => setForm((f) => ({ ...f, message: v }))}
               error={errors.message}
             />
+
+            {status === "error" && (
+              <p className="mt-2 text-sm text-fuchsia-400">
+                {errorMsg || "Errore, riprova."}
+              </p>
+            )}
 
             <button
               type="submit"
