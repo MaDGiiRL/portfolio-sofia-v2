@@ -20,6 +20,7 @@ const PROJECTS = [
     category: "Web Site",
     cover: "https://i.imgur.com/tn9kPr3.png",
     images: [
+      "https://i.imgur.com/tn9kPr3.png",
       "https://i.imgur.com/RmdSAik.png",
       "https://i.imgur.com/GYm2896.png",
       "https://i.imgur.com/SUhy0bN.png",
@@ -60,6 +61,7 @@ const PROJECTS = [
     category: "Web Site",
     cover: "https://i.imgur.com/Xvtw2hu.png",
     images: [
+      "https://i.imgur.com/Xvtw2hu.png",
       "https://i.imgur.com/9yec4E7.png",
       "https://i.imgur.com/dUmQ6Ud.png",
       "https://i.imgur.com/OTU1BxW.png",
@@ -94,6 +96,7 @@ const PROJECTS = [
     category: "Web Site",
     cover: "https://i.imgur.com/VsIf68j.png",
     images: [
+      "https://i.imgur.com/VsIf68j.png",
       "https://i.imgur.com/SmqAUJ1.png",
       "https://i.imgur.com/k4SyC4o.png",
       "https://i.imgur.com/Fhxg0H8.png",
@@ -130,6 +133,7 @@ const PROJECTS = [
     category: "FiveM",
     cover: "https://i.imgur.com/AjoObad.png",
     images: [
+      "https://i.imgur.com/AjoObad.png",
       "https://i.imgur.com/2tcZ3MZ.png",
       "https://i.imgur.com/v5qY52R.png",
       "https://i.imgur.com/dxzk1vc.png",
@@ -156,6 +160,40 @@ const PROJECTS = [
       "Storico con ID, motivo, stato, data",
     ],
     accent: "cyan",
+  },
+  {
+    id: "inventory",
+    title: "Custom OX Inventory (ESX/QB-Core)",
+    category: "FiveM",
+    cover: "https://i.imgur.com/iuv4ZIt.png",
+    images: [
+      "https://i.imgur.com/iuv4ZIt.png",
+      "https://i.imgur.com/hqjl6lH.png",
+      "https://i.imgur.com/8F3dnI9.png",
+    ],
+    description:
+      "Inventory system avanzato e responsive per server FiveM con supporto ESX e QB-Core. Gestione drag & drop, utilizzo oggetti in tempo reale, stack, peso dinamico e interfaccia ottimizzata per l’esperienza di gioco.",
+    tags: [
+      "JavaScript",
+      "HTML/CSS",
+      "Mantine",
+      "Framer Motion",
+      "Lua",
+      "ESX",
+      "QB-Core",
+    ],
+    features: [
+      "Compatibilità ESX e QB-Core",
+      "UI drag & drop responsive",
+      "Sistema peso/slot configurabile",
+      "Stack oggetti e gestione quantità",
+      "Categorie (armi, cibo, utility, ecc.)",
+      "Animazioni fluide e feedback UX",
+      "Hotbar rapida personalizzabile",
+      "Tooltip dinamici con info oggetti",
+      "Supporto immagini custom",
+    ],
+    accent: "fuchsia",
   },
 ];
 
