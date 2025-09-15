@@ -7,7 +7,7 @@ const CATEGORIES = [
   "All Projects",
   "Web Site",
   "Web Design",
-  "FiveM NUI",
+  "FiveM",
   "Grafica",
   "3D Experience",
 ];
@@ -124,9 +124,42 @@ const PROJECTS = [
     href: "https://nikelino-shop.vercel.app",
     accent: "fuchsia",
   },
+  {
+    id: "report-panel",
+    title: "Report Pane (QB-Core)",
+    category: "FiveM",
+    cover: "https://i.imgur.com/AjoObad.png",
+    images: [
+      "https://i.imgur.com/2tcZ3MZ.png",
+      "https://i.imgur.com/v5qY52R.png",
+      "https://i.imgur.com/dxzk1vc.png",
+      "https://i.imgur.com/dc4G0bk.png",
+      "https://i.imgur.com/yzdLVY6.png",
+    ],
+    description:
+      "Un sistema completo e reattivo per la gestione dei report in-game: apertura ticket, smistamento ai moderatori, tracciamento stato e audit log.",
+    tags: [
+      "Javascript",
+      "CSS",
+      "Supabase",
+      "Framer Motion",
+      "SweetAlert2",
+      "Lua",
+      "QB-Core",
+    ],
+    features: [
+      "Invio report",
+      "Lista report utente",
+      "Dashboard staff",
+      "Elenco report aperti",
+      "Azioni staff",
+      "Storico con ID, motivo, stato, data",
+    ],
+    accent: "cyan",
+  },
 ];
 
-/* ====== HOOK UTILE ====== */
+/* ====== HOOK UTILI ====== */
 function useKey(handler, deps) {
   useEffect(() => {
     const onKey = (e) => handler(e);
@@ -134,6 +167,59 @@ function useKey(handler, deps) {
     return () => document.removeEventListener("keydown", onKey);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, deps);
+}
+
+/** Drag-to-scroll orizzontale (mouse + touch) */
+function useDragScroll(ref) {
+  useEffect(() => {
+    const el = ref.current;
+    if (!el) return;
+
+    let isDown = false;
+    let startX = 0;
+    let scrollLeft = 0;
+
+    const onDown = (e) => {
+      isDown = true;
+      el.classList.add("dragging");
+      startX =
+        (("touches" in e ? e.touches[0].pageX : e.pageX) ?? 0) - el.offsetLeft;
+      scrollLeft = el.scrollLeft;
+    };
+    const onLeaveUp = () => {
+      isDown = false;
+      el.classList.remove("dragging");
+    };
+    const onMove = (e) => {
+      if (!isDown) return;
+      e.preventDefault(); // evita lo swipe browser su mobile
+      const x =
+        (("touches" in e ? e.touches[0].pageX : e.pageX) ?? 0) - el.offsetLeft;
+      const walk = x - startX;
+      el.scrollLeft = scrollLeft - walk;
+    };
+
+    // mouse
+    el.addEventListener("mousedown", onDown);
+    el.addEventListener("mouseleave", onLeaveUp);
+    el.addEventListener("mouseup", onLeaveUp);
+    el.addEventListener("mousemove", onMove);
+
+    // touch
+    el.addEventListener("touchstart", onDown, { passive: false });
+    el.addEventListener("touchend", onLeaveUp);
+    el.addEventListener("touchmove", onMove, { passive: false });
+
+    return () => {
+      el.removeEventListener("mousedown", onDown);
+      el.removeEventListener("mouseleave", onLeaveUp);
+      el.removeEventListener("mouseup", onLeaveUp);
+      el.removeEventListener("mousemove", onMove);
+      el.removeEventListener("touchstart", onDown);
+      el.removeEventListener("touchend", onLeaveUp);
+      el.removeEventListener("touchmove", onMove);
+    };
+  }, [ref]);
 }
 
 /* ====== COMPONENTE PRINCIPALE ====== */
@@ -298,15 +384,19 @@ function PortfolioCard({ project, onOpen }) {
 
           {/* FOOTER (link esterno) */}
           <div className="flex items-center justify-between px-4 pb-3 pt-2">
-            <a
-              href={href || "#"}
-              target="_blank"
-              rel="noreferrer"
-              className="inline-flex items-center gap-2 text-transparent bg-gradient-to-r from-fuchsia-400 to-fuchsia-500 bg-clip-text font-semibold"
-            >
-              <ExternalLink className="h-4 w-4 text-fuchsia-300" />
-              <span className="sr-only">Apri progetto</span>
-            </a>
+            {href ? (
+              <a
+                href={href}
+                target="_blank"
+                rel="noreferrer"
+                className="inline-flex items-center gap-2 text-transparent bg-gradient-to-r from-fuchsia-400 to-fuchsia-500 bg-clip-text font-semibold"
+              >
+                <ExternalLink className="h-4 w-4 text-fuchsia-300" />
+                <span className="sr-only">Apri progetto</span>
+              </a>
+            ) : (
+              <span aria-hidden className="h-4" />
+            )}
 
             {/* Thumb rapida */}
             {Array.isArray(images) && images[1] && (
@@ -331,6 +421,7 @@ function DetailsModal({ modal, setModal }) {
   const { project, indexImg } = modal;
   const [idx, setIdx] = useState(indexImg || 0);
   const ref = useRef(null);
+  const thumbsRef = useRef(null);
 
   // chiusura/arrow keys
   useKey(
@@ -352,8 +443,18 @@ function DetailsModal({ modal, setModal }) {
     return () => document.removeEventListener("mousedown", onDown);
   }, [setModal]);
 
+  // attiva drag-scroll per le thumbnails
+  useDragScroll(thumbsRef);
+
   return (
     <div className="fixed inset-0 z-50 grid place-items-center bg-black/60 p-3 backdrop-blur-sm">
+      {/* Stile locale per nascondere la scrollbar e gestire il cursore */}
+      <style>{`
+        .no-scrollbar { scrollbar-width: none; -ms-overflow-style: none; }
+        .no-scrollbar::-webkit-scrollbar { display: none; }
+        .dragging { cursor: grabbing !important; }
+      `}</style>
+
       <div
         ref={ref}
         className="relative w-full max-w-5xl overflow-hidden rounded-2xl border border-white/10 bg-[#0f1722]/95 p-6 shadow-2xl"
@@ -382,7 +483,8 @@ function DetailsModal({ modal, setModal }) {
               <img
                 src={project.images[idx]}
                 alt={`${project.title} image ${idx + 1}`}
-                className="aspect-video w-full object-cover"
+                className="aspect-video w-full object-cover select-none"
+                draggable={false}
               />
               <div className="pointer-events-none absolute inset-0 flex items-center justify-between px-2">
                 <button
@@ -404,8 +506,11 @@ function DetailsModal({ modal, setModal }) {
               </div>
             </div>
 
-            {/* thumbs */}
-            <div className="mt-3 flex gap-3 overflow-x-auto pb-1">
+            {/* thumbs: no scrollbar visibile + drag */}
+            <div
+              ref={thumbsRef}
+              className="mt-3 flex gap-3 overflow-x-auto no-scrollbar pb-1 cursor-grab select-none"
+            >
               {project.images.map((src, i) => (
                 <button
                   key={i}
@@ -417,7 +522,12 @@ function DetailsModal({ modal, setModal }) {
                       : "border-white/10 hover:border-white/20",
                   ].join(" ")}
                 >
-                  <img src={src} className="h-full w-full object-cover" />
+                  <img
+                    src={src}
+                    className="h-full w-full object-cover pointer-events-none"
+                    draggable={false}
+                    alt=""
+                  />
                 </button>
               ))}
             </div>
@@ -450,14 +560,16 @@ function DetailsModal({ modal, setModal }) {
               </ul>
             </div>
 
-            <a
-              href={project.href}
-              target="_blank"
-              rel="noreferrer"
-              className="mt-5 inline-flex items-center gap-2 rounded-xl border border-cyan-400/60 bg-white/5 px-4 py-2 font-semibold text-cyan-200 hover:drop-shadow-[0_0_12px_rgba(19,242,220,0.65)]"
-            >
-              Visit Project <ExternalLink className="h-4 w-4" />
-            </a>
+            {project.href && (
+              <a
+                href={project.href}
+                target="_blank"
+                rel="noreferrer"
+                className="mt-5 inline-flex items-center gap-2 rounded-xl border border-cyan-400/60 bg-white/5 px-4 py-2 font-semibold text-cyan-200 hover:drop-shadow-[0_0_12px_rgba(19,242,220,0.65)]"
+              >
+                Visit Project <ExternalLink className="h-4 w-4" />
+              </a>
+            )}
           </div>
         </div>
       </div>
