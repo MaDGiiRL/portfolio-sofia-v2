@@ -44,7 +44,7 @@ export default function Hero() {
   `;
 
   return (
-    <section className="relative w-full py-20 md:py-50 min-h-screen">
+    <section className="relative w-full py-20 md:py-70 min-h-screen">
       <div className="mx-auto grid max-w-7xl grid-cols-1 items-center gap-12 px-4 lg:grid-cols-2">
         {/* LEFT */}
         <div className="relative">
