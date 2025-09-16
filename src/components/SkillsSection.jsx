@@ -100,7 +100,7 @@ function SkillCard({
   const titleClr = accent === "fuchsia" ? "text-fuchsia-300" : "text-cyan-200";
 
   return (
-    <article className="group relative">
+    <article className="group relative ">
       <div
         className={["rounded-2xl p-[2px] bg-gradient-to-br", ring].join(" ")}
       >
@@ -153,7 +153,7 @@ export default function SkillsSection({
   const [ref, inView] = useInView();
 
   return (
-    <section ref={ref} className="relative w-full py-16 md:py-24">
+    <section ref={ref} className="relative w-full py-16 md:py-24 min-h-screen">
       <div className="mx-auto max-w-6xl px-4">
         {/* Header */}
         <div className="text-center">

@@ -1,22 +1,69 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 
-/* Hook: osserva quando il blocco entra in viewport */
-function useInView(options = { threshold: 0.25 }) {
+/* Hook: in-view solo dopo che l'utente ha scrollato almeno una volta */
+function useInView(
+  ioOptions = { threshold: 0.25, rootMargin: "0px 0px -15% 0px" },
+  opts = { requireScroll: true, once: true }
+) {
   const ref = useRef(null);
   const [inView, setInView] = useState(false);
+  const [hasScrolled, setHasScrolled] = useState(!opts?.requireScroll);
+
+  // Memo delle opzioni per evitare ricreazioni inutili
+  const options = useMemo(
+    () => ({
+      threshold: ioOptions.threshold ?? 0.25,
+      rootMargin: ioOptions.rootMargin ?? "0px",
+    }),
+    [ioOptions.threshold, ioOptions.rootMargin]
+  );
+
+  // Primo scroll: abilita l’osservazione
+  useEffect(() => {
+    if (!opts?.requireScroll) return;
+    let done = false;
+    const onScroll = () => {
+      if (!done) {
+        done = true;
+        setHasScrolled(true);
+        window.removeEventListener("scroll", onScroll, { passive: true });
+      }
+    };
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => window.removeEventListener("scroll", onScroll, { passive: true });
+  }, [opts?.requireScroll]);
+
   useEffect(() => {
     const el = ref.current;
-    if (!el) return;
+    if (!el || !hasScrolled) return;
+
     const io = new IntersectionObserver(([entry]) => {
       if (entry.isIntersecting) {
         setInView(true);
-        io.unobserve(el); // fire once
+        if (opts?.once !== false) io.unobserve(el); // fire once
+      } else if (opts?.once === false) {
+        setInView(false);
       }
     }, options);
+
     io.observe(el);
     return () => io.disconnect();
-  }, [options]);
+  }, [hasScrolled, options, opts?.once]);
+
   return [ref, inView];
+}
+
+/* Hook per rispettare prefers-reduced-motion */
+function useReducedMotion() {
+  const [reduced, setReduced] = useState(false);
+  useEffect(() => {
+    const mq = window.matchMedia("(prefers-reduced-motion: reduce)");
+    const update = () => setReduced(mq.matches);
+    update();
+    mq.addEventListener?.("change", update);
+    return () => mq.removeEventListener?.("change", update);
+  }, []);
+  return reduced;
 }
 
 /* Counter animato */
@@ -29,8 +76,14 @@ function Counter({
   inView,
 }) {
   const [val, setVal] = useState(from);
+  const reduce = useReducedMotion();
+
   useEffect(() => {
     if (!inView) return;
+    if (reduce) {
+      setVal(to);
+      return;
+    }
     let raf = 0,
       start = 0;
     const ease = (t) => 1 - Math.pow(1 - t, 3); // easeOutCubic
@@ -42,7 +95,8 @@ function Counter({
     };
     raf = requestAnimationFrame(loop);
     return () => cancelAnimationFrame(raf);
-  }, [from, to, duration, inView]);
+  }, [from, to, duration, inView, reduce]);
+
   return (
     <span>
       {prefix}
@@ -52,23 +106,65 @@ function Counter({
   );
 }
 
+/* Barra competenza con animazione percentuale */
+function SkillBar({ label, value, inView }) {
+  const [w, setW] = useState(0);
+  const reduce = useReducedMotion();
+
+  useEffect(() => {
+    if (!inView) return;
+    if (reduce) {
+      setW(value);
+      return;
+    }
+    const duration = 1100;
+    let raf = 0,
+      start = 0;
+    const ease = (t) => 1 - Math.pow(1 - t, 3);
+    const loop = (ts) => {
+      if (!start) start = ts;
+      const p = Math.min(1, (ts - start) / duration);
+      setW(Math.round(value * ease(p)));
+      if (p < 1) raf = requestAnimationFrame(loop);
+    };
+    raf = requestAnimationFrame(loop);
+    return () => cancelAnimationFrame(raf);
+  }, [value, inView, reduce]);
+
+  return (
+    <div>
+      <div className="mb-1 flex items-center justify-between text-sm">
+        <span className="font-semibold text-cyan-200">{label}</span>
+        <span className="font-bold text-fuchsia-400">{w}%</span>
+      </div>
+      <div className="h-2 w-full rounded-full bg-white/10">
+        <div
+          className="h-2 rounded-full bg-gradient-to-r from-cyan-400 to-fuchsia-500 shadow-[0_0_12px_rgba(19,242,220,0.35)] transition-[width]"
+          style={{ width: `${w}%` }}
+        />
+      </div>
+    </div>
+  );
+}
+
+/* Sezione About */
 export default function AboutSection({
-  // numeri dinamici
   years = 8,
   projects = 200,
-  // competenze dinamiche
   skills = [
     { label: "Frontend Development", value: 95 },
     { label: "Backend Systems", value: 90 },
     { label: "3D & Interactive Visuals", value: 85 },
     { label: "AI Integration", value: 80 },
   ],
-  // URL documenti
   cvUrl = "/cv/sofia-vidotto-cv.pdf",
   diplomaFullStackUrl = "https://www.credential.net/9bcc06d6-6d2c-4a95-aff9-c03874c1bdf9#acc.iZsw3pbr",
   diplomaReactUrl = "https://www.credential.net/f75b7cb6-5d49-46f3-9893-9946b64298be#acc.pyQNCgRZ",
 }) {
-  const [rootRef, inView] = useInView();
+  const [rootRef, inView] = useInView(
+    { threshold: 0.25, rootMargin: "0px 0px -15% 0px" },
+    { requireScroll: true, once: true }
+  );
 
   const safeCvUrl =
     typeof cvUrl === "string" && cvUrl ? cvUrl : "/cv/sofia-vidotto-cv.pdf";
@@ -82,7 +178,7 @@ export default function AboutSection({
       : "https://www.credential.net/f75b7cb6-5d49-46f3-9893-9946b64298be#acc.pyQNCgRZ";
 
   return (
-    <section ref={rootRef} className="relative w-full py-16 md:py-24">
+    <section ref={rootRef} className="relative w-full py-16 md:py-24 ">
       <div className="mx-auto max-w-6xl px-4">
         {/* titolo */}
         <div className="mb-10 text-center">
@@ -291,40 +387,5 @@ export default function AboutSection({
         </div>
       </div>
     </section>
-  );
-}
-
-/* Barra competenza con animazione percentuale */
-function SkillBar({ label, value, inView }) {
-  const [w, setW] = useState(0);
-  useEffect(() => {
-    if (!inView) return;
-    const duration = 1100;
-    let raf = 0,
-      start = 0;
-    const ease = (t) => 1 - Math.pow(1 - t, 3);
-    const loop = (ts) => {
-      if (!start) start = ts;
-      const p = Math.min(1, (ts - start) / duration);
-      setW(Math.round(value * ease(p)));
-      if (p < 1) raf = requestAnimationFrame(loop);
-    };
-    raf = requestAnimationFrame(loop);
-    return () => cancelAnimationFrame(raf);
-  }, [value, inView]);
-
-  return (
-    <div>
-      <div className="mb-1 flex items-center justify-between text-sm">
-        <span className="font-semibold text-cyan-200">{label}</span>
-        <span className="font-bold text-fuchsia-400">{w}%</span>
-      </div>
-      <div className="h-2 w-full rounded-full bg-white/10">
-        <div
-          className="h-2 rounded-full bg-gradient-to-r from-cyan-400 to-fuchsia-500 shadow-[0_0_12px_rgba(19,242,220,0.35)] transition-[width]"
-          style={{ width: `${w}%` }}
-        />
-      </div>
-    </div>
   );
 }

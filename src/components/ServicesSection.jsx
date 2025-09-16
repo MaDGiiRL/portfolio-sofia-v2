@@ -2,7 +2,7 @@ import { Monitor, Gamepad2, Palette, Check } from "lucide-react";
 
 export default function ServicesSection() {
   return (
-    <section className="relative w-full py-16 md:py-24">
+    <section className="relative w-full py-16 md:py-24 ">
       <div className="mx-auto max-w-6xl px-4">
         {/* Header */}
         <div className="text-center">
