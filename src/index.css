@@ -48,9 +48,6 @@ body {
   min-height: 70vh;
 }
 
-/* ================== Fonts ================== */
-/* JetBrains Mono */
-@import url("https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600;700&display=swap");
 
 /* Utility font per i blocchi codice */
 .font-jbm,

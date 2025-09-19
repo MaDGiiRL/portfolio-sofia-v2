@@ -285,6 +285,36 @@ const PROJECTS = [
     ],
     accent: "cyan",
   },
+  {
+    id: "website_v1",
+    title: "Server RP Website Template V1",
+    category: "Web Site",
+    cover: "https://i.imgur.com/Xc4TTAm.png",
+    images: [
+      "https://i.imgur.com/Xc4TTAm.png",
+      "https://i.imgur.com/fJSWPRz.png",
+      "https://i.imgur.com/VTwXmKA.png",
+      "https://i.imgur.com/yvHWyDT.png",
+      "https://i.imgur.com/NwFSbL0.png",
+      "https://i.imgur.com/CHKWRVC.png",
+    ],
+    description:
+      "Template moderno, elegante e responsive per la presentazione di server RP su FiveM. Realizzato con React, Vite e Tailwind, include sezioni Hero full screen, About, Regolamento interattivo, Staff, Sponsor e form di candidatura per lo staff. Pensato per community che vogliono un sito accattivante, veloce e facilmente personalizzabile.",
+    tags: ["JavaScript", "HTML/CSS", "React", "TailwindCSS", "Lucide Icons"],
+    features: [
+      "Hero section full screen con overlay a gradienti",
+      "Sezione About con immagini e card dettagliate",
+      "Regolamento interattivo diviso in categorie e sidebar",
+      "Carosello sponsor con loop orizzontale animato",
+      "Sezione Staff con ruoli, foto e icone personalizzate",
+      "Form candidatura staff con icone inline e validazione base",
+      "Palette colori personalizzabile e gradienti dinamici",
+      "Responsive design ottimizzato per mobile e desktop",
+      "Animazioni fluide e dettagli visivi moderni",
+    ],
+    href: "https://template-website-server-rp-v1.vercel.app",
+    accent: "fuchsia",
+  },
 ];
 
 /* ====== HOOK UTILI ====== */
