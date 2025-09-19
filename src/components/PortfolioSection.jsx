@@ -196,28 +196,6 @@ const PROJECTS = [
     accent: "fuchsia",
   },
   {
-    id: "multicharacter",
-    title: "Custom ESX Multicharacter",
-    category: "FiveM",
-    cover: "https://i.imgur.com/ltx1i52.png",
-    images: ["https://i.imgur.com/ltx1i52.png"],
-    description:
-      "Sistema multicharacter avanzato per server FiveM basati su ESX. Permette ai giocatori di creare, selezionare e gestire più personaggi in modo semplice e intuitivo. Interfaccia moderna, animazioni fluide e piena integrazione con database MySQL.",
-    tags: ["JavaScript", "HTML/CSS", "Lua", "MySQL", "ESX", "FiveM", "UI/UX"],
-    features: [
-      "Gestione multi-personaggio con limiti configurabili",
-      "Interfaccia UI moderna e responsive",
-      "Creazione, eliminazione e selezione personaggi",
-      "Animazioni fluide e transizioni dinamiche",
-      "Integrazione completa con database MySQL",
-      "Supporto skin e personalizzazione PG",
-      "Compatibilità con sistemi di spawn configurabili",
-      "Controlli di sicurezza (anti-duplicazione personaggi)",
-      "Design ottimizzato per un’esperienza utente immediata",
-    ],
-    accent: "cyan",
-  },
-  {
     id: "hud_1",
     title: "Custom ESX HUD MaD City",
     category: "FiveM",
