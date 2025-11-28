@@ -293,6 +293,31 @@ const PROJECTS = [
     href: "https://template-website-server-rp-v1.vercel.app",
     accent: "fuchsia",
   },
+  {
+    id: "website_v3",
+    title: "Wedding Template",
+    category: "Web Site",
+    cover: "https://i.imgur.com/sqY7Chf.png",
+    images: [
+      "https://i.imgur.com/sqY7Chf.png",
+      "https://i.imgur.com/qjxzX4P.png",
+      "https://i.imgur.com/ebY54mN.png",
+      "https://i.imgur.com/ebY54mN.png",
+      "https://i.imgur.com/tYItgsD.png",
+    ],
+    description:
+      "Questo progetto è una simulazione frontend di un pannello tipo MaCasatoresc.com realizzato con React, Vite e TailwindCSS. Presenta un design elegante e moderno, con sezioni dedicate a informazioni sull'evento, galleria fotografica, RSVP e dettagli logistici. Il layout è completamente responsive, garantendo un'esperienza utente ottimale su dispositivi mobili e desktop. Include animazioni fluide e interazioni intuitive per migliorare l'engagement degli utenti.",
+    tags: ["JavaScript", "HTML/CSS", "React", "TailwindCSS", "Lucide Icons"],
+    features: [
+      "Modificare i dati del wedding website (nomi, data, location, testi ecc.)",
+      "Vedere in live preview una landing page di matrimonio con hero, countdown, about, story e RSVP",
+      "Design elegante, moderno e responsive",
+      "Animazioni fluide e interazioni intuitive",
+      "NO BACKEND: simulazione frontend senza funzionalità di invio reali",
+    ],
+    href: "https://wedding-template-one.vercel.app/",
+    accent: "cyan",
+  },
 ];
 
 /* ====== HOOK UTILI ====== */
