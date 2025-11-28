@@ -313,7 +313,7 @@ const PROJECTS = [
       "Vedere in live preview una landing page di matrimonio con hero, countdown, about, story e RSVP",
       "Design elegante, moderno e responsive",
       "Animazioni fluide e interazioni intuitive",
-      "NO BACKEND: simulazione frontend senza funzionalità di invio reali",
+      "BACKEND IN COSTRUZIONE",
     ],
     href: "https://wedding-template-one.vercel.app/",
     accent: "cyan",
