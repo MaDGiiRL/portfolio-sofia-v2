@@ -15,7 +15,7 @@ const CATEGORIES = [
 /* ====== PROGETTI REALI ====== */
 const PROJECTS = [
   {
-    id: "mads-portfolio-v1",
+    id: "1",
     title: "MaD's Portfolio V1",
     category: "Web Site",
     cover: "https://i.imgur.com/tn9kPr3.png",
@@ -56,7 +56,7 @@ const PROJECTS = [
   },
 
   {
-    id: "fallen-world",
+    id: "2",
     title: "Fallen World — Official Website",
     category: "Web Site",
     cover: "https://i.imgur.com/Xvtw2hu.png",
@@ -91,7 +91,7 @@ const PROJECTS = [
   },
 
   {
-    id: "nikelino-shop",
+    id: "3",
     title: "Nikelino Shop",
     category: "Web Site",
     cover: "https://i.imgur.com/VsIf68j.png",
@@ -128,7 +128,7 @@ const PROJECTS = [
     accent: "fuchsia",
   },
   {
-    id: "report-panel",
+    id: "4",
     title: "Report Panel (QB-Core)",
     category: "FiveM",
     cover: "https://i.imgur.com/AjoObad.png",
@@ -162,7 +162,7 @@ const PROJECTS = [
     accent: "cyan",
   },
   {
-    id: "inventory_1",
+    id: "5",
     title: "Custom Fallen World OX Inventory (ESX/QB-Core)",
     category: "FiveM",
     cover: "https://i.imgur.com/iuv4ZIt.png",
@@ -196,7 +196,7 @@ const PROJECTS = [
     accent: "fuchsia",
   },
   {
-    id: "hud_1",
+    id: "6",
     title: "Custom ESX HUD MaD City",
     category: "FiveM",
     cover: "https://i.imgur.com/DW59gRS.png",
@@ -230,7 +230,7 @@ const PROJECTS = [
     accent: "fuchsia",
   },
   {
-    id: "inventory_2",
+    id: "7",
     title: "Custom Mad City OX Inventory (ESX/QB-Core)",
     category: "FiveM",
     cover: "https://i.imgur.com/YcU0dzO.png",
@@ -264,7 +264,7 @@ const PROJECTS = [
     accent: "cyan",
   },
   {
-    id: "website_v1",
+    id: "8",
     title: "Server RP Website Template V1",
     category: "Web Site",
     cover: "https://i.imgur.com/Xc4TTAm.png",
@@ -294,7 +294,7 @@ const PROJECTS = [
     accent: "fuchsia",
   },
   {
-    id: "website_v3",
+    id: "9",
     title: "Wedding Template",
     category: "Web Site",
     cover: "https://i.imgur.com/sqY7Chf.png",
@@ -317,6 +317,42 @@ const PROJECTS = [
     ],
     href: "https://wedding-template-one.vercel.app/",
     accent: "cyan",
+  },
+  {
+    id: "10",
+    title: "Utopia Society",
+    category: "Web Site",
+    cover: "https://i.imgur.com/nSvTaKN.png",
+    images: [
+      "https://i.imgur.com/nSvTaKN.png",
+      "https://i.imgur.com/I904Hrw.png",
+      "https://i.imgur.com/Z9B9SUY.png",
+      "https://i.imgur.com/OdO1jkI.png",
+    ],
+    description:
+      "Piattaforma web futuristica per la gestione di un night club esclusivo. Include frontend pubblico animato, backend core privato distribuito via NPM e dashboard admin, con forte focus su sicurezza, criptazione dei dati ed esperienza immersiva.",
+    tags: [
+      "JavaScript",
+      "React",
+      "Vite",
+      "TailwindCSS",
+      "Framer Motion",
+      "Node.js",
+      "Express",
+      "Supabase",
+      "JWT",
+      "Private NPM",
+    ],
+    features: [
+      "Landing page futuristica con animazioni, audio e scroll immersivo",
+      "Sistema di iscrizione soci con dati e documenti criptati",
+      "Backend core privato distribuito come pacchetto NPM",
+      "Dashboard admin per gestione soci, messaggi e campagne",
+      "Generazione PDF e export dati (CSV / XML / XLSX)",
+      "Architettura sicura con dati mai in chiaro",
+    ],
+    href: "https://utopia-society.me",
+    accent: "fuchsia",
   },
 ];
 
@@ -392,13 +428,14 @@ export default function PortfolioSection() {
   // ✅ categorie fisse come richiesto
   const categories = CATEGORIES;
 
-  const filtered = useMemo(
-    () =>
-      query === "All Projects"
-        ? PROJECTS
-        : PROJECTS.filter((p) => p.category === query),
-    [query]
-  );
+  const filtered = useMemo(() => {
+    const sorted = [...PROJECTS].sort((a, b) => Number(b.id) - Number(a.id));
+
+    return query === "All Projects"
+      ? sorted
+      : sorted.filter((p) => p.category === query);
+  }, [query]);
+
   const visible = filtered.slice(0, limit);
 
   return (

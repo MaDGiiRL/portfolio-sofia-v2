@@ -43,7 +43,7 @@ export default function ServicesSection() {
             color="fuchsia"
             icon={<Gamepad2 className="h-6 w-6 text-fuchsia-300" />}
             title="FiveM NUI — UI/UX & Custom"
-            desc="Grafica, loghi e sviluppo frontend NUI per FiveM: HUD, inventory, telefoni, menu e notifiche in HTML/CSS/JS. Nessuno scripting Lua o back-end."
+            desc="Grafica, loghi e sviluppo frontend NUI per FiveM: HUD, inventory, telefoni, menu e notifiche in HTML/CSS/JS."
             bullets={[
               "HUD / Inventory / Phone / Menu",
               "UI/UX design + asset grafici (icone, loghi)",

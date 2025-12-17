@@ -1,6 +1,7 @@
 import { motion } from "framer-motion";
 
 import AboutSection from "../components/AboutSection";
+import ExperienceRegionSection from "../components/ExperienceRegionSection"; // ✅ ADD
 import Hero from "../components/Hero";
 import ServicesSection from "../components/ServicesSection";
 import PortfolioSection from "../components/PortfolioSection";
@@ -51,6 +52,13 @@ export default function Home() {
         </Reveal>
       </section>
 
+      {/* ✅ NEW SECTION */}
+      <section id="experience" className="scroll-mt-28">
+        <Reveal delay={0.08}>
+          <ExperienceRegionSection />
+        </Reveal>
+      </section>
+
       <section id="skills" className="scroll-mt-28">
         <SkillsSection />
       </section>
@@ -72,12 +80,6 @@ export default function Home() {
           <FAQSection />
         </Reveal>
       </section>
-
-      {/* <section id="review" className="scroll-mt-28">
-        <Reveal delay={0.14}>
-          <TestimonialsSection />
-        </Reveal>
-      </section> */}
 
       <section id="contact" className="scroll-mt-28">
         <Reveal delay={0.1}>
@@ -113,7 +115,6 @@ export default function Home() {
         </Reveal>
       </section>
 
-      {/* Banners fuori navbar */}
       <Reveal y={12} duration={0.55}>
         <DiscordShopBanner
           inviteUrl="https://discord.gg/DhDfTWPucn"
